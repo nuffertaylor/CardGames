@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="main.css">
+        <script src="main.js"></script>
+    </head>
+    <body onload="dealCards()">
+        <h1>blackjack</h1>
+        <div id="house">
+            <h2>house cards</h2>
+            <ul id="houseCards"></ul>
+            <h3 id="houseBustIndicator" class="loss"></h3>
+            <h5 id="houseTotal"></h5>
+        </div>
+        <div>
+            <h2 id="victoryIndicator"></h2>
+            <h4 id="pot"></h4>
+        </div>
+        <div id="player">
+            <h2>your cards</h2>
+            <ul id="playerCards"></ul>
+            <h3 id="bustIndicator" class="loss"></h3>
+            <h5 id="playerTotal"></h5>
+            <h4 id="wallet"></h4>
+            <button type="button" class="btn btn-primary" onclick="hitMe()">hit me</button>
+            <button type="button" class="btn btn-secondary" onclick="stay()">stay</button>
+            <button type="button" class="btn btn-success" onclick="bet()">bet</button>
+            <button type="button" class="btn btn-danger" onclick="startOver()">start over</button>
+        </div>
+
+    </body>
+</html>

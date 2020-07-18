@@ -1,0 +1,7 @@
+body { padding: 1vw; }
+
+.loss { color: red; }
+
+.win { color: rgb(6, 143, 6); }
+
+.neutral { color: gray; }
