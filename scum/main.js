@@ -3,14 +3,15 @@ var numPlayers = 0;
 var players = [];
 var usedCards = [];
 
-
 /**called to begin a new round of scum */
 function startGame()
 {
     numCards = 0;
     numPlayers = 0;
     players = [];
+    deck = [];
     usedCards = [];
+    document.getElementById("playing-area").innerHTML="";
     while(true)
     {
         numPlayers = (prompt("how many players? (between 2-6)"));
@@ -40,6 +41,7 @@ function dealCards()
         {
             player.hand.push(getCard());
         }
+        player.hand.sort(function(a,b){return b.value - a.value;})
         players.push(player);
         console.log(player);
     }
@@ -48,8 +50,8 @@ function dealCards()
 function createGui()
 {
     var playing_area = document.getElementById("playing-area");
-    var zone_offset = 0;
-    for(var p = 1; p < numPlayers; p++)
+    var zone_offset = 20;
+    for(var p = 0; p < numPlayers; p++)
     {
         let player_zone = document.createElement("div");
         player_zone.classList.add("player-zone");
@@ -58,7 +60,8 @@ function createGui()
 
         playing_area.appendChild(player_zone);
         let header = document.createElement("h4");
-        header.innerHTML = "player ".concat(p);
+        if(p==0) header.innerHTML = "your cards";
+        else header.innerHTML = "player ".concat(p);
         player_zone.appendChild(header);
 
         var card_layer_offset = 50;
@@ -66,16 +69,22 @@ function createGui()
         {
             let card = document.createElement("div");
             card.classList.add("card");
-            card.classList.add("card-back");
+            if(p==0)
+            {
+                card.classList.add("card-front");
+                let cardStr = '<div class="card-text">' + players[0].hand[c].str + '</div><img src="img/' + players[0].hand[c].suite + '.svg" class="suite-icon">';
+                console.log(cardStr);
+                card.innerHTML = cardStr;
+            }
+            else {card.classList.add("card-back");}
             card.id = "player ".concat(p).concat("card-layer".concat(c));
             card.style.top = card_layer_offset.toString().concat("px");
             card.style.zIndex = c;
             player_zone.appendChild(card);
-            card_layer_offset = card_layer_offset + 20;
+            card_layer_offset = card_layer_offset + 23;
         }
         zone_offset = zone_offset + 150;
     }
-
 }
 
 /**
@@ -84,9 +93,24 @@ function createGui()
  */
 function getCard()
 {
+    let cardVal = 14 - Math.floor(Math.random() * 13);
+    let cardSuite = Math.floor(Math.random() * 4) + 1;
+    let cardStr = cardVal + " of " + cardSuite;
+    while(usedCards.includes(cardStr))
+    {
+        cardVal = 14 - Math.floor(Math.random() * 13);
+        cardSuite = Math.floor(Math.random() * 4) + 1;
+        cardStr = cardVal + " of " + cardSuite;
+    }
+    usedCards.push(cardStr);
+    return translateCard(cardVal, cardSuite);
+}
+
+function translateCard(cardVal, cardSuite)
+{
     var card = new Object;
 
-    card.value = Math.floor(Math.random() * 13) + 2;
+    card.value = cardVal;
     switch(card.value)
     {
         case 11:
@@ -105,25 +129,21 @@ function getCard()
             card.str = card.value;
             break;
     }
-    
-    card.suite = Math.floor(Math.random() * 4) + 1;
-    switch(card.suite)
+    switch(cardSuite)
     {
         case 1:
-            card.str = card.str + " of hearts";
+            card.suite = "hearts";
             break;
         case 2:
-            card.str = card.str + " of clubs";
+            card.suite = "clubs";
             break;
         case 3:
-            card.str = card.str + " of diamonds";
+            card.suite = "diamonds";
             break;
         case 4:
-            card.str = card.str + " of spades";
+            card.suite = "spades";
             break;
     }
-    if(usedCards.includes(card.str))
-        card = getCard();
-    usedCards.push(card.str);
+
     return card;
 }
